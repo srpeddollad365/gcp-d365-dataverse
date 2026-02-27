@@ -5,3 +5,6 @@ variable "db_version" {}
 variable "db_tier" {}
 variable "network_id" {}
 variable "kms_key" {}
+variable "instance_name" {
+  type = string
+}

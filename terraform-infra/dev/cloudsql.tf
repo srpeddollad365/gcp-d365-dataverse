@@ -1,6 +1,7 @@
 module "cloudsql" {
   source = "../../terraform-modules/cloudsql"
 
+  instance_name = google_sql_database_instance.postgres.name
   product_name = var.product_name
   environment  = var.environment
   region       = var.region
