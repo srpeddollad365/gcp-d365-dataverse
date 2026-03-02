@@ -1,3 +1,3 @@
-# output "project_roles_applied" {
-#   value = keys(var.project_roles)
-# }
+output "project_roles_applied" {
+  value = keys(var.project_roles)
+}
