@@ -31,30 +31,54 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Authenticate to GCP
+      # 2️⃣ Show Branch + Commit (DEBUG)
+      - name: Debug Branch and Commit
+        run: |
+          echo "Current Branch:"
+          git branch
+          echo "Current Commit:"
+          git rev-parse HEAD
+
+      # 3️⃣ Show Terraform Files Being Executed (DEBUG)
+      - name: Debug Terraform Files
+        run: |
+          echo "----- cloudsql.tf -----"
+          cat cloudsql.tf || true
+          echo "----- Module main.tf -----"
+          cat ../../terraform-modules/cloudsql/main.tf || true
+          echo "----- Module outputs.tf -----"
+          cat ../../terraform-modules/cloudsql/outputs.tf || true
+
+      # 4️⃣ Authenticate to GCP
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-      # 3️⃣ Setup Terraform
+      # 5️⃣ Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
-      # 4️⃣ Terraform Init
+      # 6️⃣ Clean Previous Terraform Cache (Prevents Stale Module Issues)
+      - name: Clean Terraform Cache
+        run: |
+          rm -rf .terraform
+          rm -f terraform.lock.hcl
+
+      # 7️⃣ Terraform Init
       - name: Terraform Init
         run: terraform init -upgrade
 
-      # 5️⃣ Terraform Validate
+      # 8️⃣ Terraform Validate
       - name: Terraform Validate
         run: terraform validate
 
-      # 6️⃣ Terraform Plan
+      # 9️⃣ Terraform Plan
       - name: Terraform Plan
         run: terraform plan -out=tfplan
 
-      # 7️⃣ Terraform Apply
+      # 🔟 Terraform Apply
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
