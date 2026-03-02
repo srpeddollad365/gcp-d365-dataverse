@@ -79,6 +79,16 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -out=tfplan
 
+      #  10️⃣ Show Terraform Plan (DEBUG)
+      - name: Debug Terraform Plan
+        run: terraform show tfplan
+
+      # terraform state list -state=terraform.tfstate
+      - name: Terraform State List
+        run: | 
+          terraform state list
+          terraform show
+
       # 🔟 Terraform Apply
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
