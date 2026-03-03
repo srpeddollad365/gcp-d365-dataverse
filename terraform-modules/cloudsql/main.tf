@@ -17,7 +17,7 @@ resource "google_sql_database_instance" "postgres" {
   }
 
   encryption_key_name = var.kms_key
-   depends_on = [
-    google_service_networking_connection.private_vpc_connection
-  ]
+  #  depends_on = [
+  #   google_service_networking_connection.private_vpc_connection
+  # ]
 }
